@@ -1,48 +1,50 @@
-# `cebeconf`
+# `qm9nmrml`
 
 ```
-             _                                __ 
-            | |                              / _|
-   ___  ___ | |__    ___   ___  ___   _ __  | |_ 
-  / __|/ _ \| '_ \  / _ \ / __|/ _ \ | '_ \ |  _|
- | (__|  __/| |_) ||  __/| (__| (_) || | | || |  
-  \___|\___||_.__/  \___| \___|\___/ |_| |_||_|
+                   ___                                      _ 
+                  / _ \                                    | |
+   __ _  _ __ ___| (_) | _ __   _ __ ___   _ __  _ __ ___  | |
+  / _` || '_ ` _ \\__, || '_ \ | '_ ` _ \ | '__|| '_ ` _ \ | |
+ | (_| || | | | | | / / | | | || | | | | || |   | | | | | || |
+  \__, ||_| |_| |_|/_/  |_| |_||_| |_| |_||_|   |_| |_| |_||_|
+     | |                                                      
+     |_|                                                      
 ```
 
-`cebeconf` package is a set of machine-learning models for predicting 1s-`c`ore `e`lectron `b`inding `e`nergies of `CONF` atoms in organic molecules (Ref-1). 
+`qm9nmrml` package is a Python-based ML model trained on `QM9NMR` for <sup>13</sup>C chemical shift predictions. 
 
-# Details of target-level 1s core-electron binding energies
-- Models were trained on 12880 small organic molecules from the [bigQM7ω dataset](https://moldis-group.github.io/bigQM7w/) (Ref-2).
+<!-- # Details of target-level 1s core-electron binding energies
+- Models were trained on 130831 small organic molecules from the [bigQM7ω dataset](https://moldis-group.github.io/bigQM7w/) (Ref-2).
 - Target property (1s core-electron binding energies) was calculated using the meta-GGA-DFT method strongly constrained and appropriately normed (`SCAN`) with a large, `Tight-full` numeric atom-centered orbital (NAO) basis set implemented in [FHI-aims](https://fhi-aims.org/).
 - These calculations were performed using ωB97XD/def2TZVP geometries presented in the bigQM7ω dataset.
 - For delta learning, the baseline energies were assigned based on Mulliken occupations. The data can be found in `Baseline_files`.
-- Two example files (UFF-PBE : [ethane](https://github.com/moldis-group/cebeconf/blob/main/example_Mulliken_ethane_UFF_pbe_cc-pVDZ.txt) and [propane](https://github.com/moldis-group/cebeconf/blob/main/example_Mulliken_propane_UFF_pbe_cc-pVDZ.txt)) are also provided in home folder showing the output from Mulliken.out file from FHI-aims.
+- Two example files (UFF-PBE : [ethane](https://github.com/moldis-group/cebeconf/blob/main/example_Mulliken_ethane_UFF_pbe_cc-pVDZ.txt) and [propane](https://github.com/moldis-group/cebeconf/blob/main/example_Mulliken_propane_UFF_pbe_cc-pVDZ.txt)) are also provided in home folder showing the output from Mulliken.out file from FHI-aims. -->
 
- # Details of training the ML models 
+ <!-- # Details of training the ML models 
 - To facilitate rapid application of the ML models, training was done using _baseline_ geometries of the bigQM7ω molecules determined with the universal force field (UFF). These geometries are also provided at [https://moldis-group.github.io/bigQM7w/](https://moldis-group.github.io/bigQM7w/)
 - So, for new predictions, the ML models require geometries quickly determined with UFF.
 - ML models were trained using the kernel-ridge-regression model using the atomic Coulomb matrix representation.
-- For technical details, see Ref-1, and its Supporting Information. 
+- For technical details, see Ref-1, and its Supporting Information.  -->
 
-# Run `cebeconf` 
+# Run `qm9nmrml` 
 
- - Install dependencies `numpy`, `pandas`
+ - Install dependencies `numpy`, `pandas`, `matplotlib`, `os`
 
 - Download and install the package
 ```
-    git clone git@github.com:moldis-group/cebeconf.git
+    git clone https://github.com/moldis-group/qm9nmrml.git
     pip3 install -e cebeconf
 ```
 - Install from PyPI
 ```
-   pip3 install cebeconf
+   pip3 install qm9nmrml
 ```
 
- - Create an XYZ file at the UFF level (see below to learn about how to do this)
+ - Create an XYZ file at the PM7 level 
 
- - Run the ML model in `python3` (example in `cebeconf/test` folder)
+ - Run the ML model in `python3` (example in `qm9nmrml/test` folder)
 
- ```
+ <!-- ```
 from cebeconf import calc_be
   
 calc_be('test.xyz','direct', 'ACM')
@@ -88,9 +90,9 @@ H     5.35240   2.60380   1.06330
     2 C      2.53800000     -0.21440000     -0.12550000     291.83 eV
     3 C      2.99750000     -0.46340000     -1.49170000     291.90 eV
 ...
-```
+``` -->
 
-# How to calculate UFF-level geometry? 
+<!-- # How to calculate UFF-level geometry? 
 
 Write down the [SMILES descriptor](https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system) of the molecule (example `c1ccccc1` for benzene) in a file. 
 
@@ -112,16 +114,13 @@ Python version: 3.8.20
 Numpy version: 1.21.6
 PyTorch version: 2.4.1
 SchNetPack version: 0.3
-```
+``` -->
 
 # References
-[Ref-1] [_Chemical Space-Informed Machine Learning Models for
-Rapid Predictions of X-ray Photoelectron Spectra of Organic Molecules_](https://doi.org/10.1088/2632-2153/ad871d)    
-Susmita Tripathy, Surajit Das, Shweta Jindal, Raghunathan Ramakrishnan      
-Mach. Learn.: Sci. Technol. 5 (2024) 045023.
+[Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_]  (https://doi.org/10.1038/sdata.2014.22)    
+Raghunathan Ramakrishnan, Pavlo O Dral, Matthias Rupp,  O. Anatole Von Lilienfeld
+Sci. Data 1 (2014) 1-7.
 
-[Ref-2] [_The Resolution-vs.-Accuracy Dilemma in Machine Learning Modeling of Electronic Excitation Spectra_](https://doi.org/10.1039/D1DD00031D)                  
-Prakriti Kayastha, Sabyasachi Chakraborty, Raghunathan Ramakrishnan    
-Digital Discov., 1 (2022) 689-702.    
-
-
+[Ref-2] [_{Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules_](https://doi.org/10.1088/2632-2153/abe347)                  
+Amit Gupta, Sabyasachi Chakraborty, Raghunathan Ramakrishnan     
+Mach. learn.: sci. technol. 2 (2021) 035010.    
