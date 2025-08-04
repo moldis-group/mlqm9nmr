@@ -11,7 +11,7 @@
      |_|                                                      
 ```
 
-`qm9nmrml` package is a Python-based ML model trained on `QM9NMR` for <sup>13</sup>C chemical shift predictions. 
+`qm9nmrml` package is a Python-based ML model trained on `QM9NMR` for <sup>13</sup>C-NMR chemical shift prediction. 
 
 <!-- # Details of target-level 1s core-electron binding energies
 - Models were trained on 130831 small organic molecules from the [bigQM7ω dataset](https://moldis-group.github.io/bigQM7w/) (Ref-2).
@@ -26,13 +26,13 @@
 - ML models were trained using the kernel-ridge-regression model using the atomic Coulomb matrix representation.
 - For technical details, see Ref-1, and its Supporting Information.  -->
 
-# Run `qm9nmrml` 
+# Install `qm9nmrml` 
 
- - Install dependencies `numpy`, `pandas`, `matplotlib`, `os`
+- Requirements: `numpy`, `matplotlib`, `os`
 
 - Download and install the package
 ```
-    git clone https://github.com/moldis-group/qm9nmrml.git
+    git clone git@github.com:moldis-group/qm9nmrml.git
     pip3 install -e cebeconf
 ```
 - Install from PyPI
@@ -40,41 +40,64 @@
    pip3 install qm9nmrml
 ```
 
- - Create an XYZ file at the PM7 level 
+# Run `qm9nmrml`
 
- - Run the ML model in `python3` (example in `qm9nmrml/test` folder)
+- Step 0: Download the PM7 level geometry file from [QM9NMR dataset](https://moldis-group.github.io/qm9nmr/).
 
- <!-- ```
-from cebeconf import calc_be
-  
-calc_be('test.xyz','direct', 'ACM')
- ```
+- Step 1: Create the training descriptor file:
 
- - Suppose `test.xyz' contains the following geometry (which is the last molecule in bigQM7ω dataset)
-```
-18
-bigQM7w_UFF_012883
-C     1.03070  -0.07680   0.06770  
-C     2.53800  -0.21440  -0.12550  
-C     2.99750  -0.46340  -1.49170  
-N     3.09380   0.90540  -0.90860  
-C     4.47940   1.20090  -0.50870  
-C     5.01760   2.53370  -1.00430  
-C     4.47490   2.41010   0.41050  
-H     0.59860  -1.07330   0.29480  
-H     0.52630   0.33730  -0.83250  
-H     0.83500   0.60170   0.92380  
-H     3.17550  -0.57150   0.71420  
-H     2.25180  -0.44020  -2.31440  
-H     3.99580  -0.93590  -1.63370  
-H     5.09800   0.43550   0.01500  
-H     4.34280   2.85880  -1.82600  
-H     6.09080   2.33310  -1.20820  
-H     3.60210   3.09770   0.43410  
-H     5.35240   2.60380   1.06330 
-```
+    ```
+    from qm9nmrML import create_descriptor_file
 
-- Running the code generates the following output
+    descriptor   = 'abob' # OPTIONS: acm, acm_rbf, abob, abob_rbf
+    qm9_xyz_file = '/home/surajit/Downloads/SI_baseline_geo.xyz' 
+
+    create_descriptor_file(qm9_xyz_file,descriptor)
+    ```
+
+- Step 2: Create an XYZ file at the PM7 level (save it as `test.xyz')
+    ```
+    18
+    bigQM7w_UFF_012883
+    C     1.03070  -0.07680   0.06770  
+    C     2.53800  -0.21440  -0.12550  
+    C     2.99750  -0.46340  -1.49170  
+    N     3.09380   0.90540  -0.90860  
+    C     4.47940   1.20090  -0.50870  
+    C     5.01760   2.53370  -1.00430  
+    C     4.47490   2.41010   0.41050  
+    H     0.59860  -1.07330   0.29480  
+    H     0.52630   0.33730  -0.83250  
+    H     0.83500   0.60170   0.92380  
+    H     3.17550  -0.57150   0.71420  
+    H     2.25180  -0.44020  -2.31440  
+    H     3.99580  -0.93590  -1.63370  
+    H     5.09800   0.43550   0.01500  
+    H     4.34280   2.85880  -1.82600  
+    H     6.09080   2.33310  -1.20820  
+    H     3.60210   3.09770   0.43410  
+    H     5.35240   2.60380   1.06330 
+    ```
+
+ - Step 3: Run the ML model in `python3` (example in `qm9nmrml/test` folder)
+
+    ```
+    from qm9nmrML import calc_nmr
+    from qm9nmrML import plot_nmr
+
+    filename   = 'test.xyz'
+
+    # OPTIONS: acm, acm_rbf, abob, abob_rbf
+    descriptor = 'acm' 
+
+    # absolute or relative path  
+    di_path = 'di_acm4.txt' 
+
+    cs = calc_nmr(filename,descriptor)
+    plot_nmr(cs)
+    ```
+
+<!-- - Running the code generates the following output
 ```
 ...
  +--------------+
@@ -114,13 +137,13 @@ Python version: 3.8.20
 Numpy version: 1.21.6
 PyTorch version: 2.4.1
 SchNetPack version: 0.3
-``` -->
+```  -->
 
 # References
-[Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_](https://doi.org/10.1038/sdata.2014.22)    
-Raghunathan Ramakrishnan, Pavlo O Dral, Matthias Rupp,  O. Anatole Von Lilienfeld
-Sci. Data 1 (2014) 1-7.
+[Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_](https://doi.org/10.1038/sdata.2014.22)
+<br>Raghunathan Ramakrishnan, Pavlo O Dral, Matthias Rupp,  O. Anatole Von Lilienfeld
+<br>Sci. Data 1 (2014) 1-7.
 
-[Ref-2] [_Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules_](https://doi.org/10.1088/2632-2153/abe347)                  
-Amit Gupta, Sabyasachi Chakraborty, Raghunathan Ramakrishnan
-Mach. learn.: sci. technol. 2 (2021) 035010.    
+[Ref-2] [_Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules_](https://doi.org/10.1088/2632-2153/abe347)
+<br>Amit Gupta, Sabyasachi Chakraborty, Raghunathan Ramakrishnan
+<br>Mach. learn.: sci. technol. 2 (2021) 035010.    
