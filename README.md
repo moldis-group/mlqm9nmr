@@ -117,10 +117,10 @@ SchNetPack version: 0.3
 ``` -->
 
 # References
-[Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_]  (https://doi.org/10.1038/sdata.2014.22)    
+[Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_](https://doi.org/10.1038/sdata.2014.22)    
 Raghunathan Ramakrishnan, Pavlo O Dral, Matthias Rupp,  O. Anatole Von Lilienfeld
 Sci. Data 1 (2014) 1-7.
 
-[Ref-2] [_{Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules_](https://doi.org/10.1088/2632-2153/abe347)                  
-Amit Gupta, Sabyasachi Chakraborty, Raghunathan Ramakrishnan     
+[Ref-2] [_Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules_](https://doi.org/10.1088/2632-2153/abe347)                  
+Amit Gupta, Sabyasachi Chakraborty, Raghunathan Ramakrishnan
 Mach. learn.: sci. technol. 2 (2021) 035010.    
