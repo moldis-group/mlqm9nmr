@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='cebeconf',
-    version='1.0.1',
+    name='qm9nmr-ml',
+    version='0.0.0',
     packages=find_packages(),
-    package_data={'cebeconf': ['data/*']},
+    package_data={'qm9nmr-ml': ['data/*']},
     author='Raghunathan Ramakrishnan',
     author_email='raghu.rama.chem@gmail.com',
-    url='https://github.com/moldis-group/cebeconf',
+    url='https://github.com/moldis-group/qm9nmr-ml',
     license='MIT License',
-    description='cebeconf: A package of machine-learning models for predicting 1s-core electron binding energies of CONF atoms in organic molecules.',
+    description='qm9nmr-ml: A Python-based ML model trained on QM9NMR for 13C chemical shift predictions.',
     long_desc_type="text/markdown",
-    install_requires=[ 'pandas', 'numpy' ],
+    install_requires=[ 'pandas', 'numpy','matplotlib' ],
     include_package_data=True
 )
 
