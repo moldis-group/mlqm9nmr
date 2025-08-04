@@ -33,7 +33,7 @@
 - Download and install the package
 ```
     git clone git@github.com:moldis-group/qm9nmrml.git
-    pip3 install -e cebeconf
+    pip3 install -e qm9nmrml
 ```
 - Install from PyPI
 ```
@@ -42,7 +42,7 @@
 
 # Run `qm9nmrml`
 
-- Step 0: Download the PM7 level geometry file from [QM9NMR dataset](https://moldis-group.github.io/qm9nmr/).
+- Step 0: Download the PM7 level geometry file from [_QM9NMR dataset_](https://moldis-group.github.io/qm9nmr/).
 
 - Step 1: Create the training descriptor file:
 
@@ -50,7 +50,7 @@
     from qm9nmrML import create_descriptor_file
 
     descriptor   = 'abob' # OPTIONS: acm, acm_rbf, abob, abob_rbf
-    qm9_xyz_file = '/home/surajit/Downloads/SI_baseline_geo.xyz' 
+    qm9_xyz_file = 'SI_baseline_geo.xyz' 
 
     create_descriptor_file(qm9_xyz_file,descriptor)
     ```
