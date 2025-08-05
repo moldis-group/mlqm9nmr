@@ -17,19 +17,6 @@
 
 `mlqm9nmr` package is a Python-based ML model trained on `QM9NMR` for <sup>13</sup>C-NMR chemical shift prediction. 
 
-<!-- # Details of target-level 1s core-electron binding energies
-- Models were trained on 130831 small organic molecules from the [bigQM7ω dataset](https://moldis-group.github.io/bigQM7w/) (Ref-2).
-- Target property (1s core-electron binding energies) was calculated using the meta-GGA-DFT method strongly constrained and appropriately normed (`SCAN`) with a large, `Tight-full` numeric atom-centered orbital (NAO) basis set implemented in [FHI-aims](https://fhi-aims.org/).
-- These calculations were performed using ωB97XD/def2TZVP geometries presented in the bigQM7ω dataset.
-- For delta learning, the baseline energies were assigned based on Mulliken occupations. The data can be found in `Baseline_files`.
-- Two example files (UFF-PBE : [ethane](https://github.com/moldis-group/cebeconf/blob/main/example_Mulliken_ethane_UFF_pbe_cc-pVDZ.txt) and [propane](https://github.com/moldis-group/cebeconf/blob/main/example_Mulliken_propane_UFF_pbe_cc-pVDZ.txt)) are also provided in home folder showing the output from Mulliken.out file from FHI-aims. -->
-
- <!-- # Details of training the ML models 
-- To facilitate rapid application of the ML models, training was done using _baseline_ geometries of the bigQM7ω molecules determined with the universal force field (UFF). These geometries are also provided at [https://moldis-group.github.io/bigQM7w/](https://moldis-group.github.io/bigQM7w/)
-- So, for new predictions, the ML models require geometries quickly determined with UFF.
-- ML models were trained using the kernel-ridge-regression model using the atomic Coulomb matrix representation.
-- For technical details, see Ref-1, and its Supporting Information.  -->
-
 # Install `mlqm9nmr` 
 
 - Requirements: `numpy`, `matplotlib`, `os`
@@ -58,6 +45,13 @@
 
     create_descriptor_file(qm9_xyz_file,descriptor)
     ```
+    
+    Size of the training descriptor files:
+    1.5 GB    di_acm4_.txt
+    491 MB    di_abob4.txt
+    927 MB    di_acm_rbf4.txt
+    7.0 GB    di_abob_rbf4.txt
+    
 
 - Step 2: Create an XYZ file at the PM7 level (save it as `test.xyz')
     ```
@@ -100,48 +94,6 @@
     cs = calc_nmr(filename,descriptor)
     plot_nmr(cs)
     ```
-
-<!-- - Running the code generates the following output
-```
-...
- +--------------+
- | User inputs: |
- +--------------+
- Reading coordinates from: test.xyz
- Predicting 1s CEBEs using direct ML with the ACM descriptor 
-
- +--------------+
- | Prediction:  |
- +--------------+
-    1 C      1.03070000     -0.07680000      0.06770000     290.81 eV
-    2 C      2.53800000     -0.21440000     -0.12550000     291.83 eV
-    3 C      2.99750000     -0.46340000     -1.49170000     291.90 eV
-...
-``` -->
-
-<!-- # How to calculate UFF-level geometry? 
-
-Write down the [SMILES descriptor](https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system) of the molecule (example `c1ccccc1` for benzene) in a file. 
-
-    echo 'c1ccccc1' > benzene.smi
-
-Generate an initial geometry using [openbabel](http://openbabel.org/wiki/Main_Page). If you have obtained an initial geometry by other means, then you can skip the previous step.
-
-    obabel -oxyz benzene.smi > benzene.xyz --gen3d
-
-Relax tightly using UFF.
-
-    obminimize -oxyz -sd -ff UFF -c 1e-8 benzene.xyz > benzene_UFF.xyz
-
-:warning: We have used Open Babel 2.4.1 in our workflow.
-
-:warning: We have tested the code to work with the following versions of Python and other modules. 
-```
-Python version: 3.8.20 
-Numpy version: 1.21.6
-PyTorch version: 2.4.1
-SchNetPack version: 0.3
-```  -->
 
 # References
 [Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_](https://doi.org/10.1038/sdata.2014.22)
