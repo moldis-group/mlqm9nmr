@@ -19,7 +19,7 @@ def read_xyz(filename):
         elif a.lower() == 'n': atno = 7
         elif a.lower() == 'o': atno = 8
         elif a.lower() == 'f': atno = 9
-        else: raise ValueError(f'Molecule has {a} atom, which is not included in the training.')
+        else: raise ValueError(f'Molecule has {a} atom, which is not included in the ML model.')
         
         Zs.append(atno)
         Rs.append(np.array([float(x),float(y),float(z)]))

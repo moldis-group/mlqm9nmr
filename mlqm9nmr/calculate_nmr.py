@@ -16,15 +16,13 @@ def calc_nmr(xyz_file,di_path,descriptor):
     if descriptor == 'abob':     sig = 65.5336
     if descriptor == 'abob_rbf': sig = 1695.3555
 
-    # if descriptor == 'acm':      di = np.loadtxt('/home/surajit/QM9_134k_descriptor/di_train_100k_qm9_acm4_Cnmr_3_cos2.0.txt')
-    # if descriptor == 'acm_rbf':  di = np.loadtxt('/home/surajit/QM9_134k_descriptor/di_train_100k_qm9_conacm4_Cnmr_0.05_0.5_6_0.02_3_cos2.0.txt')
-    # if descriptor == 'abob':     di = np.loadtxt('/home/surajit/QM9_134k_descriptor/di_train_100k_qm9_abob4_Cnmr_3_cos2.0.txt')
-    # if descriptor == 'abob_rbf': di = np.loadtxt('/home/surajit/QM9_134k_descriptor/di_train_100k_qm9_conabob4_Cnmr_0.05_0.5_6_0.05_3_cos2.0.txt')
-
     di = np.loadtxt(di_path)
     ci = get_coefficient(descriptor)
 
     zs,rs = read_xyz(xyz_file)
+
+    if len(zs) > 29: raise ValueError('The number of atoms is more than 29.')
+    if 6 not in set(zs): raise ValueError('No carbon atom present in the dataset.')
 
     if descriptor == 'acm':      dq = acm(4,6,zs,rs)
     if descriptor == 'acm_rbf':  dq = acm_rbf(4,6,zs,rs)
@@ -43,7 +41,6 @@ def calc_nmr(xyz_file,di_path,descriptor):
         print(f'C{i+1:d} {tms - nmr_prd:10.2f} ppm')
 
     return cs
-
 
 
 def plot_nmr(cs):
