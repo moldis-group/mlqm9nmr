@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: mlqm9nmr
+Version: 0.0.0
+Summary: mlqm9nmr: A Python-based ML model trained on QM9NMR for 13C chemical shift predictions.
+Home-page: https://github.com/moldis-group/mlqm9nmr
+Author: Raghunathan Ramakrishnan
+Author-email: raghu.rama.chem@gmail.com
+License: MIT License
+Platform: UNKNOWN
+License-File: LICENSE
+
+UNKNOWN
+

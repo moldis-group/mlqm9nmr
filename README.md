@@ -1,17 +1,21 @@
-# `qm9nmrml`
+# `mlqm9nmr`
 
 ```
-                   ___                                      _ 
-                  / _ \                                    | |
-   __ _  _ __ ___| (_) | _ __   _ __ ___   _ __  _ __ ___  | |
-  / _` || '_ ` _ \\__, || '_ \ | '_ ` _ \ | '__|| '_ ` _ \ | |
- | (_| || | | | | | / / | | | || | | | | || |   | | | | | || |
-  \__, ||_| |_| |_|/_/  |_| |_||_| |_| |_||_|   |_| |_| |_||_|
-     | |                                                      
-     |_|                                                      
+              888                         .d8888b.                                 
+              888                        d88P  Y88b                                
+              888                        888    888                                
+88888b.d88b.  888  .d88888 88888b.d88b.  Y88b. d888 88888b.  88888b.d88b.  888d888 
+888 "888 "88b 888 d88" 888 888 "888 "88b  "Y888P888 888 "88b 888 "888 "88b 888P"   
+888  888  888 888 888  888 888  888  888        888 888  888 888  888  888 888     
+888  888  888 888 Y88b 888 888  888  888 Y88b  d88P 888  888 888  888  888 888     
+888  888  888 888  "Y88888 888  888  888  "Y8888P"  888  888 888  888  888 888     
+                       888                                                         
+                       888                                                         
+                       888                                                         
+                                                                 
 ```
 
-`qm9nmrml` package is a Python-based ML model trained on `QM9NMR` for <sup>13</sup>C-NMR chemical shift prediction. 
+`mlqm9nmr` package is a Python-based ML model trained on `QM9NMR` for <sup>13</sup>C-NMR chemical shift prediction. 
 
 <!-- # Details of target-level 1s core-electron binding energies
 - Models were trained on 130831 small organic molecules from the [bigQM7ω dataset](https://moldis-group.github.io/bigQM7w/) (Ref-2).
@@ -26,28 +30,28 @@
 - ML models were trained using the kernel-ridge-regression model using the atomic Coulomb matrix representation.
 - For technical details, see Ref-1, and its Supporting Information.  -->
 
-# Install `qm9nmrml` 
+# Install `mlqm9nmr` 
 
 - Requirements: `numpy`, `matplotlib`, `os`
 
 - Download and install the package
 ```
-    git clone git@github.com:moldis-group/qm9nmrml.git
-    pip3 install -e qm9nmrml
+    git clone git@github.com:moldis-group/mlqm9nmr.git
+    pip3 install -e mlqm9nmr
 ```
 - Install from PyPI
 ```
-   pip3 install qm9nmrml
+   pip3 install mlqm9nmr
 ```
 
-# Run `qm9nmrml`
+# Run `mlqm9nmr`
 
 - Step 0: Download the PM7 level geometry file from [_QM9NMR dataset_](https://moldis-group.github.io/qm9nmr/).
 
 - Step 1: Create the training descriptor file:
 
     ```
-    from qm9nmrML import create_descriptor_file
+    from mlqm9nmr import create_descriptor_file
 
     descriptor   = 'abob' # OPTIONS: acm, acm_rbf, abob, abob_rbf
     qm9_xyz_file = 'SI_baseline_geo.xyz' 
@@ -79,11 +83,11 @@
     H     5.35240   2.60380   1.06330 
     ```
 
- - Step 3: Run the ML model in `python3` (example in `qm9nmrml/test` folder)
+ - Step 3: Run the ML model in `python3` (example in `mlqm9nmr/test` folder)
 
     ```
-    from qm9nmrML import calc_nmr
-    from qm9nmrML import plot_nmr
+    from mlqm9nmr import calc_nmr
+    from mlqm9nmr import plot_nmr
 
     filename   = 'test.xyz'
 
