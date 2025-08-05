@@ -47,10 +47,10 @@
     ```
     
     Size of the training descriptor files:
-    1.5 GB    di_acm4_.txt
-    491 MB    di_abob4.txt
-    927 MB    di_acm_rbf4.txt
-    7.0 GB    di_abob_rbf4.txt
+    <br>1.5 GB    di_acm.txt
+    <br>491 MB    di_abob.txt
+    <br>927 MB    di_acm_rbf.txt
+    <br>7.0 GB    di_abob_rbf.txt
     
 
 - Step 2: Create an XYZ file at the PM7 level (save it as `test.xyz')
@@ -89,7 +89,7 @@
     descriptor = 'acm' 
 
     # absolute or relative path  
-    di_path = 'di_acm4.txt' 
+    di_path = 'di_acm.txt' 
 
     cs = calc_nmr(filename,descriptor)
     plot_nmr(cs)
