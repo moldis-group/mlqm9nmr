@@ -1,4 +1,5 @@
 import numpy as np 
+import pandas as pd
 import matplotlib.pyplot as plt 
 
 from mlqm9nmr import read_xyz
@@ -15,6 +16,11 @@ def calc_nmr(xyz_file,di_path,descriptor):
     if descriptor == 'acm_rbf':  sig = 3381.9080
     if descriptor == 'abob':     sig = 65.5336
     if descriptor == 'abob_rbf': sig = 1695.3555
+
+    if descriptor == 'acm':      p25,p50,p75,p90 = 1617.04, 1828.13, 2066.72, 2248.00
+    if descriptor == 'abob':     p25,p50,p75,p90 =   31.35,   45.40,   61.37,   75.66
+    if descriptor == 'acm_rbf':  p25,p50,p75,p90 = 1682.29, 2360.82, 3075.64, 3549.91
+    if descriptor == 'abob_rbf': p25,p50,p75,p90 =  855.39, 1167.80, 1547.30, 1813.36
 
     di = np.loadtxt(di_path)
     ci = get_coefficient(descriptor)
@@ -38,7 +44,12 @@ def calc_nmr(xyz_file,di_path,descriptor):
     
         nmr_prd = np.sum(ci * kqt)
         cs.append(tms - nmr_prd)
-        print(f'C{i+1:d} {tms - nmr_prd:10.2f} ppm')
+
+        df = pd.DataFrame({'dij': dqt})
+        p25q = df['dij'].quantile(0.25)
+
+        if p25q < p25: print(f'C{i+1:d} {tms - nmr_prd:10.2f} ppm (Good)')
+        else:          print(f'C{i+1:d} {tms - nmr_prd:10.2f} ppm (Moderate)')
 
     return cs
 
