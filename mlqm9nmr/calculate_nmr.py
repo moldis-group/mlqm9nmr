@@ -5,12 +5,13 @@ import matplotlib.pyplot as plt
 from mlqm9nmr import read_xyz
 from mlqm9nmr import acm,acm_rbf,abob,abob_rbf
 from mlqm9nmr import gau_cs
+from mlqm9nmr import get_training_descriptors
 from mlqm9nmr import get_coefficient
 
 # mPW1PW91/6-311+G(2d,p) @ B3LYP/6–31G(2df,p) 
 tms = 186.9704  
 
-def calc_nmr(xyz_file,di_path,descriptor):
+def calc_nmr(xyz_file,descriptor):
 
     if descriptor == 'acm':      sig = 2643.9900
     if descriptor == 'acm_rbf':  sig = 3381.9080
@@ -22,7 +23,7 @@ def calc_nmr(xyz_file,di_path,descriptor):
     if descriptor == 'acm_rbf':  p05,p25,p50,p75,p95 = 1017.46, 1696.82, 2354.07,3065.50,3957.52
     if descriptor == 'abob_rbf': p05,p25,p50,p75,p95 =  497.04,  857.39, 1175.91,1541.74,1949.07
 
-    di = np.loadtxt(di_path)
+    di = get_training_descriptors(descriptor)
     ci = get_coefficient(descriptor)
 
     zs,rs = read_xyz(xyz_file)
@@ -60,7 +61,7 @@ def calc_nmr(xyz_file,di_path,descriptor):
 
 def plot_nmr(cs):
 
-    fig,ax=plt.subplots(figsize=(8,6))
+    fig,ax=plt.subplots(figsize=(4,4))
 
     cs_min = 0
     cs_max = 175

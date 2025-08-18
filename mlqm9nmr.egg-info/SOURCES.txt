@@ -12,6 +12,10 @@ mlqm9nmr.egg-info/SOURCES.txt
 mlqm9nmr.egg-info/dependency_links.txt
 mlqm9nmr.egg-info/requires.txt
 mlqm9nmr.egg-info/top_level.txt
+mlqm9nmr/data/aBoB_4.dat.bz2
+mlqm9nmr/data/aBoB_RBF_4.dat.bz2
+mlqm9nmr/data/aCM_4.dat.bz2
+mlqm9nmr/data/aCM_RBF_4.dat.bz2
 mlqm9nmr/data/ci_100000_qm9_abob4_Cnmr_3_cos2.0.txt
 mlqm9nmr/data/ci_100000_qm9_acm4_Cnmr_3_cos2.0.txt
 mlqm9nmr/data/ci_100000_qm9_conabob4_Cnmr_0.05_0.5_6_0.05_3_cos2.0.txt

@@ -11,6 +11,7 @@ from .functions import gau_cs
 
 from .get_values import get_index
 from .get_values import get_coefficient
+from .get_values import get_training_descriptors
 
 from .descriptors import acm 
 from .descriptors import acm_rbf
