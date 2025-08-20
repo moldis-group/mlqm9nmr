@@ -19,7 +19,9 @@
 
 # Install `mlqm9nmr` 
 
-- Requirements: `numpy`, `matplotlib`, `os`, `bz2`
+#### Step 1
+
+- Requirements: `numpy`, `scipy`, `matplotlib`, `os`, `bz2`
 
 - Download and install the package
 ```
@@ -33,27 +35,39 @@
 
 # Run `mlqm9nmr`
 
-- Step 0: Download the PM7 level geometry file from [_QM9NMR dataset_](https://moldis-group.github.io/qm9nmr/).
+#### Step 2
 
-- Step 1: Create the training descriptor file:
+##### OPTION A: If you have Git LFS:
+    Go to Step 3. <br>
+    If you want to install Git LFS, [click](https://github.com/surajitdas09/git_lfs)
+
+
+##### OPTION B: If you have Git LFS:
+
+- Download the PM7 level geometry file from [_QM9NMR dataset_](https://moldis-group.github.io/qm9nmr/).
+
+- Create the training descriptor file:
 
     ```
     from mlqm9nmr import create_descriptor_file
 
-    descriptor   = 'abob' # OPTIONS: acm, acm_rbf, abob, abob_rbf
-    qm9_xyz_file = 'SI_baseline_geo.xyz' 
+    descriptor = 'abob' # OPTIONS: 'acm', 'acm_rbf', 'abob', or 'abob_rbf'
+
+    # Download it from: https://moldis-group.github.io/qm9nmr/
+    qm9_xyz_file = 'SI_baseline_geo.xyz' # absolute or relative path 
 
     create_descriptor_file(qm9_xyz_file,descriptor)
     ```
     
     Size of the training descriptor files:
-    <br>1.5 GB    di_acm.txt
-    <br>491 MB    di_abob.txt
-    <br>927 MB    di_acm_rbf.txt
-    <br>7.0 GB    di_abob_rbf.txt
+    <br>1.5 GB    aCM_4.dat
+    <br>491 MB    aBoB_4.dat
+    <br>927 MB    aCM_RBF_4.dat
+    <br>7.0 GB    aBoB_RBF_4.dat
     
 
-- Step 2: Create an XYZ file at the PM7 level (save it as `test.xyz')
+##### Step 2.1
+- Create an XYZ file at the PM7 level (save it as `test.xyz')
     ```
     18
     bigQM7w_UFF_012883
@@ -77,23 +91,37 @@
     H     5.35240   2.60380   1.06330 
     ```
 
- - Step 3: Run the ML model in `python3` (example in `mlqm9nmr/test` folder)
+##### Step 3
+- Run the ML model in `python3` (example in `mlqm9nmr/test` folder)
 
+    ###### For OPTION A
     ```
     from mlqm9nmr import calc_nmr
     from mlqm9nmr import plot_nmr
 
-    filename   = 'test.xyz'
+    filename   = 'test.xyz'     # test file name
+    descriptor = 'abob'         # OPTIONS: 'acm', 'acm_rbf', 'abob', or 'abob_rbf'
 
-    # OPTIONS: acm, acm_rbf, abob, abob_rbf
-    descriptor = 'acm' 
+    cs = calc_nmr(filename,descriptor,di_path='bz2')
 
-    # absolute or relative path  
-    di_path = 'di_acm.txt' 
-
-    cs = calc_nmr(filename,descriptor)
     plot_nmr(cs)
     ```
+
+    ###### For OPTION B
+    ```
+    from mlqm9nmr import calc_nmr
+    from mlqm9nmr import plot_nmr
+
+    filename   = 'test.xyz'     # test file name
+    descriptor = 'abob'         # OPTIONS: 'acm', 'acm_rbf', 'abob', or 'abob_rbf'
+    path       = 'aBoB_4.dat'   # absolute or relative path for the di file
+
+    cs = calc_nmr(filename,descriptor,di_path=path)
+
+    plot_nmr(cs)
+    ```
+
+
 
 # References
 [Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_](https://doi.org/10.1038/sdata.2014.22)
