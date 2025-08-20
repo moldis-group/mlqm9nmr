@@ -38,8 +38,9 @@
 ### Step 2.1
 
 ##### OPTION A: If you have Git LFS:
-    Go to Step 3. <br>
-    If you want to install Git LFS, [_click_](https://github.com/surajitdas09/git_lfs/)
+
+Go to Step 3. <br>
+If you want to install Git LFS, [_click here_](https://github.com/surajitdas09/git_lfs/).
 
 
 ##### OPTION B: If you have Git LFS:
