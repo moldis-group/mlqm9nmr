@@ -19,7 +19,7 @@
 
 # Install `mlqm9nmr` 
 
-#### Step 1
+### Step 1
 
 - Requirements: `numpy`, `scipy`, `matplotlib`, `os`, `bz2`
 
@@ -35,11 +35,11 @@
 
 # Run `mlqm9nmr`
 
-#### Step 2
+### Step 2.1
 
 ##### OPTION A: If you have Git LFS:
     Go to Step 3. <br>
-    If you want to install Git LFS, [click](https://github.com/surajitdas09/git_lfs)
+    If you want to install Git LFS, [_click_](https://github.com/surajitdas09/git_lfs/)
 
 
 ##### OPTION B: If you have Git LFS:
@@ -66,8 +66,8 @@
     <br>7.0 GB    aBoB_RBF_4.dat
     
 
-##### Step 2.1
-- Create an XYZ file at the PM7 level (save it as `test.xyz')
+### Step 2.2
+- Create an XYZ file at the PM7 level (save it as 'test.xyz')
     ```
     18
     bigQM7w_UFF_012883
@@ -91,7 +91,7 @@
     H     5.35240   2.60380   1.06330 
     ```
 
-##### Step 3
+### Step 3
 - Run the ML model in `python3` (example in `mlqm9nmr/test` folder)
 
     ###### For OPTION A
