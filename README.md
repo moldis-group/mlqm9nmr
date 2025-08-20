@@ -19,7 +19,7 @@
 
 # Install `mlqm9nmr` 
 
-- Requirements: `numpy`, `matplotlib`, `os`
+- Requirements: `numpy`, `matplotlib`, `os`, `bz2`
 
 - Download and install the package
 ```

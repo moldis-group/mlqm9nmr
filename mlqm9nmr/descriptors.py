@@ -584,16 +584,16 @@ def create_descriptor_file(filepath,descriptor):
 
             zs,rs=read_xyz('mol.xyz')
 
-            if descriptor == 'acm':      di = acm(4,6,zs,rs)
-            if descriptor == 'acm_rbf':  di = acm_rbf(4,6,zs,rs)
-            if descriptor == 'abob':     di = abob(4,6,zs,rs)
-            if descriptor == 'abob_rbf': di = abob_rbf(4,6,zs,rs)
+            if descriptor == 'acm':      name,di = 'aCM_4',     acm(4,6,zs,rs)
+            if descriptor == 'acm_rbf':  name,di = 'aCM_RBF_4', acm_rbf(4,6,zs,rs)
+            if descriptor == 'abob':     name,di = 'aBoB_4',    abob(4,6,zs,rs)
+            if descriptor == 'abob_rbf': name,di = 'aBoB_RBF_4',abob_rbf(4,6,zs,rs)
 
             for d in di:
                 if count in index:
                     di_line[position[count]] = d
                 count += 1
 
-    np.savetxt(f'di_{descriptor}.txt',np.array(di_line),fmt='%.4f')
+    np.savetxt(f'{name}.dat',np.array(di_line),fmt='%.4f')
 
     return print(f'{descriptor} descriptor file generation successful.')

@@ -11,7 +11,7 @@ from mlqm9nmr import get_coefficient
 # mPW1PW91/6-311+G(2d,p) @ B3LYP/6–31G(2df,p) 
 tms = 186.9704  
 
-def calc_nmr(xyz_file,descriptor):
+def calc_nmr(xyz_file,descriptor,di_path):
 
     if descriptor == 'acm':      sig = 2643.9900
     if descriptor == 'acm_rbf':  sig = 3381.9080
@@ -23,7 +23,9 @@ def calc_nmr(xyz_file,descriptor):
     if descriptor == 'acm_rbf':  p05,p25,p50,p75,p95 = 1017.46, 1696.82, 2354.07,3065.50,3957.52
     if descriptor == 'abob_rbf': p05,p25,p50,p75,p95 =  497.04,  857.39, 1175.91,1541.74,1949.07
 
-    di = get_training_descriptors(descriptor)
+    if di_path == 'bz2': di = get_training_descriptors(descriptor)
+    else: di = np.loadtxt(di_path)
+    
     ci = get_coefficient(descriptor)
 
     zs,rs = read_xyz(xyz_file)
