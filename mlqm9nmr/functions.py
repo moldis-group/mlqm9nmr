@@ -27,27 +27,22 @@ def read_xyz(filename):
     return np.array(Zs), np.array(Rs)
 
 
-# Normalized Gaussian function
-def ngau_func(r,zi,zj,ri,rj,sig,beta):
-    gr = 1/r**beta
+# Scaling function
+def s(r,beta): return 1/r**beta
+
+
+# Normalized gaussian function
+def g(r,zi,zj,ri,rj,sig,beta):
+    
     N = 1/(sig*np.sqrt(2*np.pi))
     rij = np.linalg.norm(ri-rj)
-    return N * (zi*zj/rij) * np.exp(- ((r-rij)**2) / (2*sig**2) ) * gr
 
-
-# Scaling function
-def scal_func(r,beta):
-    return 1/r**beta
-
+    return N * (zi*zj/rij) * np.exp(- ((r-rij)**2) / (2*sig**2) ) * s(rij,beta)
 
 # Damping function
-def damp_func(func,para,d):
+def f(func,para,d):
     if func == 'exp' : return np.exp(-para*d)
     if func == 'pol' : return 1./(1+d)**para
     if func == 'cos' : return 0.5 * ( 1 + np.cos(np.pi*d/para) )
 
 
-# Gaussian for assigning chemical shifts
-def gau_cs(r,cs):
-    sw = 0.5
-    return np.exp(- ((r-cs)**2) / (2*sw**2) ) 

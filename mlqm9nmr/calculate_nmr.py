@@ -1,27 +1,25 @@
 import numpy as np 
-import pandas as pd
 import matplotlib.pyplot as plt 
 
 from mlqm9nmr import read_xyz
 from mlqm9nmr import acm,acm_rbf,abob,abob_rbf
-from mlqm9nmr import gau_cs
 from mlqm9nmr import get_training_descriptors
 from mlqm9nmr import get_coefficient
 
-# mPW1PW91/6-311+G(2d,p) @ B3LYP/6–31G(2df,p) 
+# mPW1PW91/6-311+G(2d,p) // B3LYP/6–31G(2df,p) 
 tms = 186.9704  
 
 def calc_nmr(xyz_file,descriptor,di_path):
 
     if descriptor == 'acm':      sig = 2643.9900
-    if descriptor == 'acm_rbf':  sig = 3381.9080
-    if descriptor == 'abob':     sig = 65.5336
-    if descriptor == 'abob_rbf': sig = 1695.3555
+    if descriptor == 'acm_rbf':  sig = 3097.5820
+    if descriptor == 'abob':     sig =   65.5336
+    if descriptor == 'abob_rbf': sig = 1682.5215
 
-    if descriptor == 'acm':      p05,p25,p50,p75,p95 = 1297.20, 1612.01, 1833.97,2058.76,2367.35
-    if descriptor == 'abob':     p05,p25,p50,p75,p95 =   13.78,   31.68,   45.45,  60.84,  81.97
-    if descriptor == 'acm_rbf':  p05,p25,p50,p75,p95 = 1017.46, 1696.82, 2354.07,3065.50,3957.52
-    if descriptor == 'abob_rbf': p05,p25,p50,p75,p95 =  497.04,  857.39, 1175.91,1541.74,1949.07
+    if descriptor == 'acm':      p05,p25,p50,p75,p95 = 1297.20, 1612.01, 1833.97, 2058.76, 2367.35
+    if descriptor == 'abob':     p05,p25,p50,p75,p95 =   13.78,   31.68,   45.45,   60.84,   81.97
+    if descriptor == 'acm_rbf':  p05,p25,p50,p75,p95 = 1010.39, 1683.87, 2334.47, 3039.01, 3923.13
+    if descriptor == 'abob_rbf': p05,p25,p50,p75,p95 =  493.72,  851.42, 1166.87, 1528.98, 1932.51
 
     if di_path == 'bz2': di = get_training_descriptors(descriptor)
     else: di = np.loadtxt(di_path)
@@ -30,7 +28,8 @@ def calc_nmr(xyz_file,descriptor,di_path):
 
     zs,rs = read_xyz(xyz_file)
 
-    if len(zs) > 29: raise ValueError('The number of atoms is more than 29.')
+    if descriptor == 'acm' or descriptor == 'abob':
+        if len(zs) > 29: raise ValueError('The number of atoms is more than 29.')
     if 6 not in set(zs): raise ValueError('No carbon atom present in the dataset.')
 
     if descriptor == 'acm':      dq = acm(4,6,zs,rs)
@@ -63,34 +62,32 @@ def calc_nmr(xyz_file,descriptor,di_path):
 
 def plot_nmr(cs):
 
-    fig,ax=plt.subplots(figsize=(4,4))
+    fig,ax=plt.subplots(figsize=(6,2))
 
     cs_min = 0
-    cs_max = 175
+    cs_max = 200
 
-    if min(cs) < cs_min: cs_min = min(cs)
-    if max(cs) > cs_max: cs_max = max(cs)
+    if min(cs) < cs_min: cs_min = min(cs) - 10.0
+    if max(cs) > cs_max: cs_max = max(cs) + 10.0
 
     x = np.linspace(cs_min,cs_max,2**13)
     f = np.zeros(len(x))
 
-    for cs in cs:
-        ax.scatter(cs,-0.1,marker='x',color='red')
-        f += gau_cs(x,cs)
+    for i in range(len(cs)):
+        ax.plot([cs[i], cs[i]], [0, 5], color='black')
+    
+    ax.set_xlim([cs_max, cs_min])
+    ax.set_ylim([0, 6])
 
-    for i in range(int(max(f))+1):
-        ax.plot([cs_min,cs_max],[i+1,i+1],color='grey',alpha=0.1,linestyle='--')
+    ax.set_xticks([0,25,50,75,100,125,150,175,200])
+    ax.set_xticklabels([0,25,50,75,100,125,150,175,200],fontsize=12)
+    ax.set_yticks([])
 
-    ax.plot(x,f,color='black')
+    ax.set_xlabel('ppm',fontsize=12)
 
     ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
-    ax.tick_params(top=False, right=False, left=False)
-    ax.tick_params(axis='x', labelsize=16)
-    ax.set_yticklabels([])
-
-    ax.set_xlim([cs_min,cs_max])
-    ax.invert_xaxis()
 
     plt.savefig('chemical_shift.pdf',format='pdf',bbox_inches='tight')
 

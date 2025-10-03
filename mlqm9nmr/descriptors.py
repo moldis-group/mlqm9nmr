@@ -1,11 +1,12 @@
 import numpy as np 
+import bz2
 
 from mlqm9nmr import read_xyz
 from mlqm9nmr import get_index
 from mlqm9nmr import r,sig
-from mlqm9nmr import ngau_func
+from mlqm9nmr import g
 from mlqm9nmr import func,para,beta
-from mlqm9nmr import damp_func,scal_func 
+from mlqm9nmr import f,s 
 
 
 # Discrete aCM descriptor
@@ -63,7 +64,7 @@ def acm(cm_N,target_atomic_number,zs,rs):
                 if i == j:
                     acm[i1][i1] = 0.5*zi**2.4 
                 else:
-                    acm[i1][j1] = zi*zj/rij * scal_func(rij,beta) # scaling function: 1/r^{beta}
+                    acm[i1][j1] = zi*zj/rij * s(rij,beta) 
                     
         vec_acm = []
 
@@ -89,35 +90,35 @@ def acm(cm_N,target_atomic_number,zs,rs):
 
             if cm_N == 0: desc_bag = bags[i] # CM0
 
-            if cm_N == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]]  # CM0+CM1
+            if cm_N == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]]  # CM0+CM1
             
             if cm_N == 2: 
-                if   neighbour >= 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]]  # CM0+CM1+CM2 
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag
+                if   neighbour >= 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]]  # CM0+CM1+CM2 
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag
             
             if cm_N == 3: 
-                if   neighbour >= 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] # CM0+CM1+CM2+CM3
-                elif neighbour == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag
+                if   neighbour >= 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] # CM0+CM1+CM2+CM3
+                elif neighbour == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag
             
             if cm_N == 4: 
-                if   neighbour >= 4: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# CM0+CM1+CM2+CM3+CM4
-                elif neighbour == 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
-                elif neighbour == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag                                                              + zero_bag
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
+                if   neighbour >= 4: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# CM0+CM1+CM2+CM3+CM4
+                elif neighbour == 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
+                elif neighbour == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag                                                              + zero_bag
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
             
             if cm_N == 5: 
-                if   neighbour >= 5: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + [x*damp_func(func,para,nei_dis[i][4]) for x in bags[indices[i][4]]] # CM0+CM1+CM2+CM3+CM4+CM5
-                elif neighbour == 4: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + zero_bag
-                elif neighbour == 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag            + zero_bag
-                elif neighbour == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
+                if   neighbour >= 5: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + [x*f(func,para,nei_dis[i][4]) for x in bags[indices[i][4]]] # CM0+CM1+CM2+CM3+CM4+CM5
+                elif neighbour == 4: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + zero_bag
+                elif neighbour == 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag            + zero_bag
+                elif neighbour == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
             
             if cm_N == 'hy':
-                if   hy_neighbours >= 4: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# CM0+CM1+CM2+CM3+CM4
-                elif hy_neighbours == 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
-                elif hy_neighbours == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag
-                elif hy_neighbours == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
+                if   hy_neighbours >= 4: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# CM0+CM1+CM2+CM3+CM4
+                elif hy_neighbours == 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
+                elif hy_neighbours == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag
+                elif hy_neighbours == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
             
             descriptor.append(desc_bag)
 
@@ -143,7 +144,7 @@ def acm_rbf(cm_N,target_atomic_number,zs,rs):
         zi = zs[i]
         ri = rs[i]
 
-        di = ngau_func(r,0,0,1,2,sig,beta)
+        di = g(r,0,0,1,2,sig,beta)
 
         distances  = []
         hybd_count = 0 # 1:s 2:sp 3:sp2 4:sp3
@@ -169,7 +170,7 @@ def acm_rbf(cm_N,target_atomic_number,zs,rs):
             zj = zs[j]
             rj = rs[j]
 
-            di += ngau_func(r,zi,zj,ri,rj,sig,beta)       
+            di += g(r,zi,zj,ri,rj,sig,beta)       
 
         descs.append(list(di)) 
         indices.append(index)
@@ -190,35 +191,35 @@ def acm_rbf(cm_N,target_atomic_number,zs,rs):
 
             if cm_N == 0: desc_bag = descs[i] # BoB0
 
-            if cm_N == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]]  # BoB0+BoB1
+            if cm_N == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]]  # BoB0+BoB1
             
             if cm_N == 2: 
-                if   neighbour >= 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]]  # BoB0+BoB1+BoB2 
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag
+                if   neighbour >= 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]]  # BoB0+BoB1+BoB2 
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag
             
             if cm_N == 3: 
-                if   neighbour >= 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] # BoB0+BoB1+BoB2+BoB3
-                elif neighbour == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag
+                if   neighbour >= 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] # BoB0+BoB1+BoB2+BoB3
+                elif neighbour == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag
             
             if cm_N == 4: 
-                if   neighbour >= 4: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
-                elif neighbour == 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
-                elif neighbour == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag                                                              + zero_bag
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
+                if   neighbour >= 4: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
+                elif neighbour == 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
+                elif neighbour == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag                                                              + zero_bag
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
             
             if cm_N == 5: 
-                if   neighbour >= 5: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + [x*damp_func(func,para,nei_dis[i][4]) for x in descs[indices[i][4]]] # BoB0+BoB1+BoB2+BoB3+BoB4+BoB5
-                elif neighbour == 4: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + zero_bag
-                elif neighbour == 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag            + zero_bag
-                elif neighbour == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
+                if   neighbour >= 5: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + [x*f(func,para,nei_dis[i][4]) for x in descs[indices[i][4]]] # BoB0+BoB1+BoB2+BoB3+BoB4+BoB5
+                elif neighbour == 4: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + zero_bag
+                elif neighbour == 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag            + zero_bag
+                elif neighbour == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
             
             if cm_N == 'hy':
-                if   hy_neighbours >= 4: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
-                elif hy_neighbours == 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
-                elif hy_neighbours == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag
-                elif hy_neighbours == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
+                if   hy_neighbours >= 4: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
+                elif hy_neighbours == 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
+                elif hy_neighbours == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag
+                elif hy_neighbours == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
             
             descriptor.append(desc_bag)
 
@@ -296,7 +297,7 @@ def abob(bob_N,target_atomic_number,zs,rs):
             rj = rs[j]
 
             rij = np.linalg.norm(ri-rj)
-            val = zi*zj/rij * scal_func(rij,beta) # scaling function: 1/r^{beta}
+            val = zi*zj/rij * s(rij,beta) 
 
             if zi == 1:
                 if zj == 1: bag_11.append(val)
@@ -391,35 +392,35 @@ def abob(bob_N,target_atomic_number,zs,rs):
 
             if bob_N == 0: desc_bag = bags[i] # BoB0
 
-            if bob_N == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]]  # BoB0+BoB1
+            if bob_N == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]]  # BoB0+BoB1
             
             if bob_N == 2: 
-                if   neighbour >= 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]]  # BoB0+BoB1+BoB2 
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag
+                if   neighbour >= 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]]  # BoB0+BoB1+BoB2 
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag
             
             if bob_N == 3: 
-                if   neighbour >= 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] # BoB0+BoB1+BoB2+BoB3
-                elif neighbour == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag
+                if   neighbour >= 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] # BoB0+BoB1+BoB2+BoB3
+                elif neighbour == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag
             
             if bob_N == 4: 
-                if   neighbour >= 4: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
-                elif neighbour == 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
-                elif neighbour == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag                                                              + zero_bag
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
+                if   neighbour >= 4: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
+                elif neighbour == 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
+                elif neighbour == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag                                                              + zero_bag
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
             
             if bob_N == 5: 
-                if   neighbour >= 5: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + [x*damp_func(func,para,nei_dis[i][4]) for x in bags[indices[i][4]]] # BoB0+BoB1+BoB2+BoB3+BoB4+BoB5
-                elif neighbour == 4: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + zero_bag
-                elif neighbour == 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag            + zero_bag
-                elif neighbour == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
-                elif neighbour == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
+                if   neighbour >= 5: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + [x*f(func,para,nei_dis[i][4]) for x in bags[indices[i][4]]] # BoB0+BoB1+BoB2+BoB3+BoB4+BoB5
+                elif neighbour == 4: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]] + zero_bag
+                elif neighbour == 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag            + zero_bag
+                elif neighbour == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
+                elif neighbour == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
             
             if bob_N == 'hy':
-                if   hy_neighbours >= 4: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
-                elif hy_neighbours == 3: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
-                elif hy_neighbours == 2: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag
-                elif hy_neighbours == 1: desc_bag = bags[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
+                if   hy_neighbours >= 4: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in bags[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
+                elif hy_neighbours == 3: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in bags[indices[i][2]]] + zero_bag
+                elif hy_neighbours == 2: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in bags[indices[i][1]]] + zero_bag            + zero_bag
+                elif hy_neighbours == 1: desc_bag = bags[i] + [x*f(func,para,nei_dis[i][0]) for x in bags[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
             
             descriptor.append(desc_bag)
 
@@ -440,21 +441,21 @@ def abob_rbf(bob_N,target_atomic_number,zs,rs):
         zi = zs[i]
         ri = rs[i]
 
-        di_bag_11 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_66 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_77 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_88 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_99 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_16 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_17 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_18 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_19 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_67 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_68 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_69 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_78 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_79 = ngau_func(r,0,0,1,2,sig,beta)
-        di_bag_89 = ngau_func(r,0,0,1,2,sig,beta)
+        di_bag_11 = g(r,0,0,1,2,sig,beta)
+        di_bag_66 = g(r,0,0,1,2,sig,beta)
+        di_bag_77 = g(r,0,0,1,2,sig,beta)
+        di_bag_88 = g(r,0,0,1,2,sig,beta)
+        di_bag_99 = g(r,0,0,1,2,sig,beta)
+        di_bag_16 = g(r,0,0,1,2,sig,beta)
+        di_bag_17 = g(r,0,0,1,2,sig,beta)
+        di_bag_18 = g(r,0,0,1,2,sig,beta)
+        di_bag_19 = g(r,0,0,1,2,sig,beta)
+        di_bag_67 = g(r,0,0,1,2,sig,beta)
+        di_bag_68 = g(r,0,0,1,2,sig,beta)
+        di_bag_69 = g(r,0,0,1,2,sig,beta)
+        di_bag_78 = g(r,0,0,1,2,sig,beta)
+        di_bag_79 = g(r,0,0,1,2,sig,beta)
+        di_bag_89 = g(r,0,0,1,2,sig,beta)
 
         distances  = []
         hybd_count = 0 # 1:s 2:sp 3:sp2 4:sp3
@@ -482,21 +483,21 @@ def abob_rbf(bob_N,target_atomic_number,zs,rs):
 
             bag = f'{zi}_{zj}'
 
-            if   bag == '1_1'                :  di_bag_11 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '6_6'                :  di_bag_66 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '7_7'                :  di_bag_77 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '8_8'                :  di_bag_88 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '9_9'                :  di_bag_99 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '1_6' or bag == '6_1':  di_bag_16 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '1_7' or bag == '7_1':  di_bag_17 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '1_8' or bag == '8_1':  di_bag_18 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '1_9' or bag == '9_1':  di_bag_19 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '6_7' or bag == '7_6':  di_bag_67 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '6_8' or bag == '8_6':  di_bag_68 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '6_9' or bag == '9_6':  di_bag_69 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '7_8' or bag == '8_7':  di_bag_78 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '7_9' or bag == '9_7':  di_bag_79 += ngau_func(r,zi,zj,ri,rj,sig,beta)
-            elif bag == '8_9' or bag == '9_8':  di_bag_89 += ngau_func(r,zi,zj,ri,rj,sig,beta)  
+            if   bag == '1_1'                :  di_bag_11 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '6_6'                :  di_bag_66 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '7_7'                :  di_bag_77 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '8_8'                :  di_bag_88 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '9_9'                :  di_bag_99 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '1_6' or bag == '6_1':  di_bag_16 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '1_7' or bag == '7_1':  di_bag_17 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '1_8' or bag == '8_1':  di_bag_18 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '1_9' or bag == '9_1':  di_bag_19 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '6_7' or bag == '7_6':  di_bag_67 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '6_8' or bag == '8_6':  di_bag_68 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '6_9' or bag == '9_6':  di_bag_69 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '7_8' or bag == '8_7':  di_bag_78 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '7_9' or bag == '9_7':  di_bag_79 += g(r,zi,zj,ri,rj,sig,beta)
+            elif bag == '8_9' or bag == '9_8':  di_bag_89 += g(r,zi,zj,ri,rj,sig,beta)  
             else: assert False, f"{bag} bag is missing"
 
         di = (
@@ -524,35 +525,35 @@ def abob_rbf(bob_N,target_atomic_number,zs,rs):
 
             if bob_N == 0: desc_bag = descs[i] # BoB0
 
-            if bob_N == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]]  # BoB0+BoB1
+            if bob_N == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]]  # BoB0+BoB1
             
             if bob_N == 2: 
-                if   neighbour >= 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]]  # BoB0+BoB1+BoB2 
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag
+                if   neighbour >= 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]]  # BoB0+BoB1+BoB2 
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag
             
             if bob_N == 3: 
-                if   neighbour >= 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] # BoB0+BoB1+BoB2+BoB3
-                elif neighbour == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag
+                if   neighbour >= 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] # BoB0+BoB1+BoB2+BoB3
+                elif neighbour == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag
             
             if bob_N == 4: 
-                if   neighbour >= 4: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
-                elif neighbour == 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
-                elif neighbour == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag                                                              + zero_bag
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
+                if   neighbour >= 4: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
+                elif neighbour == 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
+                elif neighbour == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag                                                              + zero_bag
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag                                                              + zero_bag
             
             if bob_N == 5: 
-                if   neighbour >= 5: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + [x*damp_func(func,para,nei_dis[i][4]) for x in descs[indices[i][4]]] # BoB0+BoB1+BoB2+BoB3+BoB4+BoB5
-                elif neighbour == 4: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + zero_bag
-                elif neighbour == 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag            + zero_bag
-                elif neighbour == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
-                elif neighbour == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
+                if   neighbour >= 5: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + [x*f(func,para,nei_dis[i][4]) for x in descs[indices[i][4]]] # BoB0+BoB1+BoB2+BoB3+BoB4+BoB5
+                elif neighbour == 4: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]] + zero_bag
+                elif neighbour == 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag            + zero_bag
+                elif neighbour == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag            + zero_bag
+                elif neighbour == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag                                                             + zero_bag            + zero_bag            + zero_bag
             
             if bob_N == 'hy':
-                if   hy_neighbours >= 4: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*damp_func(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
-                elif hy_neighbours == 3: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*damp_func(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
-                elif hy_neighbours == 2: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*damp_func(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag
-                elif hy_neighbours == 1: desc_bag = descs[i] + [x*damp_func(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
+                if   hy_neighbours >= 4: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + [x*f(func,para,nei_dis[i][3]) for x in descs[indices[i][3]]]# BoB0+BoB1+BoB2+BoB3+BoB4
+                elif hy_neighbours == 3: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + [x*f(func,para,nei_dis[i][2]) for x in descs[indices[i][2]]] + zero_bag
+                elif hy_neighbours == 2: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + [x*f(func,para,nei_dis[i][1]) for x in descs[indices[i][1]]] + zero_bag            + zero_bag
+                elif hy_neighbours == 1: desc_bag = descs[i] + [x*f(func,para,nei_dis[i][0]) for x in descs[indices[i][0]]] + zero_bag            + zero_bag            + zero_bag
             
             descriptor.append(desc_bag)
 
@@ -561,7 +562,7 @@ def abob_rbf(bob_N,target_atomic_number,zs,rs):
 # Descriptor files
 def create_descriptor_file(filepath,descriptor):
     
-    with open(filepath,'r') as file:
+    with bz2.open(filepath,'rt') as file:
         lines = file.readlines()
     file.close()
 
@@ -592,6 +593,7 @@ def create_descriptor_file(filepath,descriptor):
             for d in di:
                 if count in index:
                     di_line[position[count]] = d
+                print(f'{count}/100000 done.')
                 count += 1
 
     np.savetxt(f'{name}.dat',np.array(di_line),fmt='%.4f')

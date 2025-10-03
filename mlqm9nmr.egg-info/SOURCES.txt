@@ -22,5 +22,5 @@ mlqm9nmr/data/ci_100000_qm9_conabob4_Cnmr_0.05_0.5_6_0.05_3_cos2.0.txt
 mlqm9nmr/data/ci_100000_qm9_conacm4_Cnmr_0.05_0.5_6_0.02_3_cos2.0.txt
 mlqm9nmr/data/index.py
 mlqm9nmr/data/index.txt
-test/test01.py
-test/test02.py
+test/test_01.py
+test/test_02.py

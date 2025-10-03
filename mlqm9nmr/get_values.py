@@ -52,19 +52,19 @@ def get_coefficient(descriptor):
     data_dir = os.path.join(base_dir, 'data')
 
     if descriptor == 'acm':
-        path = os.path.join(data_dir, 'ci_100000_qm9_acm4_Cnmr_3_cos2.0.txt')
+        path = os.path.join(data_dir, 'ci_aCM_4.dat')
         ci = np.loadtxt(path)
 
     if descriptor == 'acm_rbf':
-        path = os.path.join(data_dir, 'ci_100000_qm9_conacm4_Cnmr_0.05_0.5_6_0.02_3_cos2.0.txt')
+        path = os.path.join(data_dir, 'ci_aCM_RBF_4.dat')
         ci = np.loadtxt(path)
 
     if descriptor == 'abob':
-        path = os.path.join(data_dir, 'ci_100000_qm9_abob4_Cnmr_3_cos2.0.txt')
+        path = os.path.join(data_dir, 'ci_aBoB_4.dat')
         ci = np.loadtxt(path)
     
     if descriptor == 'abob_rbf':
-        path = os.path.join(data_dir, 'ci_100000_qm9_conabob4_Cnmr_0.05_0.5_6_0.05_3_cos2.0.txt')
+        path = os.path.join(data_dir, 'ci_aBoB_RBF_4.dat')
         ci = np.loadtxt(path)
 
     return ci

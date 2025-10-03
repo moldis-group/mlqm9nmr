@@ -1,9 +1,7 @@
 from mlqm9nmr import create_descriptor_file
 
-descriptor = 'abob' # OPTIONS: 'acm', 'acm_rbf', 'abob', or 'abob_rbf'
+descriptor    = 'acm_rbf' 
+geometry_file = '../mlqm9nmr/data/SI_baseline_geo.xyz.bz2'
 
-# Download it from: https://moldis-group.github.io/qm9nmr/
-qm9_xyz_file = 'SI_baseline_geo.xyz' # absolute or relative path 
-
-create_descriptor_file(qm9_xyz_file,descriptor)
+create_descriptor_file(geometry_file,descriptor)
 
