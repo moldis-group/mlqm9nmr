@@ -48,22 +48,18 @@ sudo apt-get install git-lfs
 
 ##### OPTION B: If you want to construct the descriptor:
 
-- Download the PM7 level geometry file from [_QM9NMR dataset_](https://moldis-group.github.io/qm9nmr/).
-
-- Create the training descriptor file:
+- Exicute `calc_di.py` Python file to create the training descriptor file:
 
     ```
     from mlqm9nmr import create_descriptor_file
 
-    descriptor = 'abob' # OPTIONS: 'acm', 'acm_rbf', 'abob', or 'abob_rbf'
+    descriptor    = 'acm_rbf' 
+    geometry_file = '../mlqm9nmr/data/SI_baseline_geo.xyz.bz2'
 
-    # Download it from: https://moldis-group.github.io/qm9nmr/
-    qm9_xyz_file = 'SI_baseline_geo.xyz' # absolute or relative path 
-
-    create_descriptor_file(qm9_xyz_file,descriptor)
+    create_descriptor_file(geometry_file,descriptor)
     ```
     
-    Size of the training descriptor files:
+    Approximate size of the training descriptor files:
     <br>1.5 GB    aCM_4.dat
     <br>491 MB    aBoB_4.dat
     <br>927 MB    aCM_RBF_4.dat
@@ -116,11 +112,10 @@ sudo apt-get install git-lfs
     from mlqm9nmr import calc_nmr
     from mlqm9nmr import plot_nmr
 
-    filename   = 'test.xyz'     # test file name
-    descriptor = 'abob'         # OPTIONS: 'acm', 'acm_rbf', 'abob', or 'abob_rbf'
+    filename   = 'test.xyz'
+    descriptor = 'abob_rbf'
 
     cs = calc_nmr(filename,descriptor,di_path='bz2')
-
     plot_nmr(cs)
     ```
 
@@ -129,12 +124,11 @@ sudo apt-get install git-lfs
     from mlqm9nmr import calc_nmr
     from mlqm9nmr import plot_nmr
 
-    filename   = 'test.xyz'     # test file name
-    descriptor = 'abob'         # OPTIONS: 'acm', 'acm_rbf', 'abob', or 'abob_rbf'
-    path       = 'aBoB_4.dat'   # absolute or relative path for the di file
+    filename   = 'test.xyz'
+    descriptor = 'abob_rbf'
+    path       = 'aBoB_RBF_4.dat'
 
     cs = calc_nmr(filename,descriptor,di_path=path)
-
     plot_nmr(cs)
     ```
 
