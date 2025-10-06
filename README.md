@@ -18,6 +18,12 @@
 
 # Step 2: Load or generate training set descriptors
 
+Approximate size of the training descriptor files:
+<br>1.5 GB    aCM_4.dat
+<br>491 MB    aBoB_4.dat
+<br>927 MB    aCM_RBF_4.dat
+<br>7.0 GB    aBoB_RBF_4.dat
+
 ### OPTION A: To load precomputed descriptors shared in this repository 
 
 - If you have Git LFS, go directly to Step 3 <br>
@@ -41,11 +47,7 @@ Then go to Step 3.
     create_descriptor_file(geometry_file,descriptor)
     ```
     
-    Approximate size of the training descriptor files:
-    <br>1.5 GB    aCM_4.dat
-    <br>491 MB    aBoB_4.dat
-    <br>927 MB    aCM_RBF_4.dat
-    <br>7.0 GB    aBoB_RBF_4.dat
+
     
 
 # Step 3: Prediction of <sup>13</sup>C-NMR chemical shift for new molecules
