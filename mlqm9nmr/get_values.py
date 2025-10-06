@@ -19,22 +19,22 @@ def get_training_descriptors(descriptor):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, 'data')
 
-    if descriptor == 'acm':
+    if descriptor == 'acm_4':
         path = os.path.join(data_dir, 'aCM_4.dat.bz2')
         with bz2.open(path, "rt") as f:
             di = np.loadtxt(f)
 
-    elif descriptor == 'acm_rbf':
+    elif descriptor == 'acm_rbf_4':
         path = os.path.join(data_dir, 'aCM_RBF_4.dat.bz2')
         with bz2.open(path, "rt") as f:
             di = np.loadtxt(f)
 
-    elif descriptor == 'abob':
+    elif descriptor == 'abob_4':
         path = os.path.join(data_dir, 'aBoB_4.dat.bz2')
         with bz2.open(path, "rt") as f:
             di = np.loadtxt(f)
 
-    elif descriptor == 'abob_rbf':
+    elif descriptor == 'abob_rbf_4':
         path = os.path.join(data_dir, 'aBoB_RBF_4.dat.bz2')
         with bz2.open(path, "rt") as f:
             di = np.loadtxt(f)
@@ -51,19 +51,19 @@ def get_coefficient(descriptor):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, 'data')
 
-    if descriptor == 'acm':
+    if descriptor == 'acm_4':
         path = os.path.join(data_dir, 'ci_aCM_4.dat')
         ci = np.loadtxt(path)
 
-    if descriptor == 'acm_rbf':
+    if descriptor == 'acm_rbf_4':
         path = os.path.join(data_dir, 'ci_aCM_RBF_4.dat')
         ci = np.loadtxt(path)
 
-    if descriptor == 'abob':
+    if descriptor == 'abob_4':
         path = os.path.join(data_dir, 'ci_aBoB_4.dat')
         ci = np.loadtxt(path)
     
-    if descriptor == 'abob_rbf':
+    if descriptor == 'abob_rbf_4':
         path = os.path.join(data_dir, 'ci_aBoB_RBF_4.dat')
         ci = np.loadtxt(path)
 

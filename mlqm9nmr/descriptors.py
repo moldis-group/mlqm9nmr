@@ -585,10 +585,10 @@ def create_descriptor_file(filepath,descriptor):
 
             zs,rs=read_xyz('mol.xyz')
 
-            if descriptor == 'acm':      name,di = 'aCM_4',     acm(4,6,zs,rs)
-            if descriptor == 'acm_rbf':  name,di = 'aCM_RBF_4', acm_rbf(4,6,zs,rs)
-            if descriptor == 'abob':     name,di = 'aBoB_4',    abob(4,6,zs,rs)
-            if descriptor == 'abob_rbf': name,di = 'aBoB_RBF_4',abob_rbf(4,6,zs,rs)
+            if descriptor == 'acm_4':      name,di = 'aCM_4',     acm(4,6,zs,rs)
+            if descriptor == 'acm_rbf_4':  name,di = 'aCM_RBF_4', acm_rbf(4,6,zs,rs)
+            if descriptor == 'abob_4':     name,di = 'aBoB_4',    abob(4,6,zs,rs)
+            if descriptor == 'abob_rbf_4': name,di = 'aBoB_RBF_4',abob_rbf(4,6,zs,rs)
 
             for d in di:
                 if count in index:

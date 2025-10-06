@@ -11,15 +11,15 @@ tms = 186.9704
 
 def calc_nmr(xyz_file,descriptor,di_path):
 
-    if descriptor == 'acm':      sig = 2643.9900
-    if descriptor == 'acm_rbf':  sig = 3097.5820
-    if descriptor == 'abob':     sig =   65.5336
-    if descriptor == 'abob_rbf': sig = 1682.5215
+    if descriptor == 'acm_4':      sig = 2643.9900
+    if descriptor == 'acm_rbf_4':  sig = 3097.5820
+    if descriptor == 'abob_4':     sig =   65.5336
+    if descriptor == 'abob_rbf_4': sig = 1682.5215
 
-    if descriptor == 'acm':      p05,p25,p50,p75,p95 = 1297.20, 1612.01, 1833.97, 2058.76, 2367.35
-    if descriptor == 'abob':     p05,p25,p50,p75,p95 =   13.78,   31.68,   45.45,   60.84,   81.97
-    if descriptor == 'acm_rbf':  p05,p25,p50,p75,p95 = 1010.39, 1683.87, 2334.47, 3039.01, 3923.13
-    if descriptor == 'abob_rbf': p05,p25,p50,p75,p95 =  493.72,  851.42, 1166.87, 1528.98, 1932.51
+    if descriptor == 'acm_4':      p05,p25,p50,p75,p95 = 1297.20, 1612.01, 1833.97, 2058.76, 2367.35
+    if descriptor == 'abob_4':     p05,p25,p50,p75,p95 =   13.78,   31.68,   45.45,   60.84,   81.97
+    if descriptor == 'acm_rbf_4':  p05,p25,p50,p75,p95 = 1010.39, 1683.87, 2334.47, 3039.01, 3923.13
+    if descriptor == 'abob_rbf_4': p05,p25,p50,p75,p95 =  493.72,  851.42, 1166.87, 1528.98, 1932.51
 
     if di_path == 'bz2': di = get_training_descriptors(descriptor)
     else: di = np.loadtxt(di_path)
@@ -28,14 +28,14 @@ def calc_nmr(xyz_file,descriptor,di_path):
 
     zs,rs = read_xyz(xyz_file)
 
-    if descriptor == 'acm' or descriptor == 'abob':
+    if descriptor == 'acm_4' or descriptor == 'abob_4':
         if len(zs) > 29: raise ValueError('The number of atoms is more than 29.')
     if 6 not in set(zs): raise ValueError('No carbon atom present in the dataset.')
 
-    if descriptor == 'acm':      dq = acm(4,6,zs,rs)
-    if descriptor == 'acm_rbf':  dq = acm_rbf(4,6,zs,rs)
-    if descriptor == 'abob':     dq = abob(4,6,zs,rs)
-    if descriptor == 'abob_rbf': dq = abob_rbf(4,6,zs,rs)
+    if descriptor == 'acm_4':      dq = acm(4,6,zs,rs)
+    if descriptor == 'acm_rbf_4':  dq = acm_rbf(4,6,zs,rs)
+    if descriptor == 'abob_4':     dq = abob(4,6,zs,rs)
+    if descriptor == 'abob_rbf_4': dq = abob_rbf(4,6,zs,rs)
 
     cs = [] # chemical shifts
 
