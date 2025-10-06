@@ -1,25 +1,8 @@
 # `mlqm9nmr`
 
-```
-              888                         .d8888b.                                 
-              888                        d88P  Y88b                                
-              888                        888    888                                
-88888b.d88b.  888  .d88888 88888b.d88b.  Y88b. d888 88888b.  88888b.d88b.  888d888 
-888 "888 "88b 888 d88" 888 888 "888 "88b  "Y888P888 888 "88b 888 "888 "88b 888P"   
-888  888  888 888 888  888 888  888  888        888 888  888 888  888  888 888     
-888  888  888 888 Y88b 888 888  888  888 Y88b  d88P 888  888 888  888  888 888     
-888  888  888 888  "Y88888 888  888  888  "Y8888P"  888  888 888  888  888 888     
-                       888                                                         
-                       888                                                         
-                       888                                                         
-                                                                 
-```
+`mlqm9nmr` package is a Python-based kernel-ridge-regression (KRR) model for <sup>13</sup>C-NMR chemical shift predictio trained on the `QM9NMR` dataset. 
 
-`mlqm9nmr` package is a Python-based ML model trained on `QM9NMR` for <sup>13</sup>C-NMR chemical shift prediction. 
-
-# Install `mlqm9nmr` 
-
-### Step 1
+# Step 1: Install `mlqm9nmr` 
 
 - Requirements: `numpy`, `scipy`, `matplotlib`, `os`, `bz2`
 
@@ -33,22 +16,21 @@
    pip3 install mlqm9nmr
 ```
 
-# Run `mlqm9nmr`
+# Step 2: Load or generate training set descriptors
 
-### Step 2.1
+### OPTION A: To load precomputed descriptors shared in this repository 
 
-##### OPTION A: If you have Git LFS:
+- If you have Git LFS, go directly to Step 3 <br>
 
-Go to Step 2.2 <br>
-If you want to install Git LFS, use:
+- If you want to install Git LFS, use:
 ```
 sudo apt-get install git-lfs
 ```
+Then go to Step 3.
 
+### OPTION B: To calculate training set descriptors from scratch 
 
-##### OPTION B: If you want to construct the descriptor:
-
-- Exicute `calc_di.py` Python file to create the training descriptor file:
+- Execute `calc_di.py` Python file to create the training descriptor file:
 
     ```
     from mlqm9nmr import create_descriptor_file
@@ -66,7 +48,10 @@ sudo apt-get install git-lfs
     <br>7.0 GB    aBoB_RBF_4.dat
     
 
-### Step 2.2
+# Step 3: Prediction of <sup>13</sup>C-NMR chemical shift for new molecules
+
+### Prepare the geometry file
+
 - Create an XYZ file at the PM7 level (save it as 'test.xyz')
     ```
     18
@@ -91,7 +76,7 @@ sudo apt-get install git-lfs
     H     5.35240   2.60380   1.06330
     ```
 
-### Step 3
+### Run the model
 - Run the ML model in `python3` (example in `mlqm9nmr/test` folder)
 
     ###### For OPTION A
@@ -122,10 +107,19 @@ sudo apt-get install git-lfs
 
 
 # References
-[Ref-1] [_Quantum chemistry structures and properties of 134 kilo molecules_](https://doi.org/10.1038/sdata.2014.22)
+- **This work presenting ML models trained on QM9NMR with new descriptors**    
+  *Enhancing NMR Shielding Predictions of Atoms-in-Molecules Machine Learning Models with Neighborhood-Informed Representations*
+<br>Surajit Das, Raghunathan Ramakrishnan
+<br>preprint (2025).  
+
+- **QM9NMR dataset**     
+  [*Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules*](https://doi.org/10.1088/2632-2153/abe347)
+<br>Amit Gupta, Sabyasachi Chakraborty, Raghunathan Ramakrishnan
+<br>Mach. learn.: sci. technol. 2 (2021) 035010. 
+
+- **QM9 dataset**     
+  [*Quantum chemistry structures and properties of 134 kilo molecules*](https://doi.org/10.1038/sdata.2014.22)
 <br>Raghunathan Ramakrishnan, Pavlo O Dral, Matthias Rupp,  O. Anatole Von Lilienfeld
 <br>Sci. Data 1 (2014) 1-7.
 
-[Ref-2] [_Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules_](https://doi.org/10.1088/2632-2153/abe347)
-<br>Amit Gupta, Sabyasachi Chakraborty, Raghunathan Ramakrishnan
-<br>Mach. learn.: sci. technol. 2 (2021) 035010.    
+   
