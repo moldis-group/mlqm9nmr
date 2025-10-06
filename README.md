@@ -20,10 +20,10 @@
 
 Approximate size of the training descriptor files:
 ```
-<br>1.5 GB    aCM_4.dat
-<br>491 MB    aBoB_4.dat
-<br>927 MB    aCM_RBF_4.dat
-<br>7.0 GB    aBoB_RBF_4.dat
+1.5 GB    aCM_4.dat
+491 MB    aBoB_4.dat
+927 MB    aCM_RBF_4.dat
+7.0 GB    aBoB_RBF_4.dat
 ```
 
 ### OPTION A: To load precomputed descriptors shared in this repository 
