@@ -11,10 +11,6 @@
     git clone git@github.com:moldis-group/mlqm9nmr.git
     pip3 install -e mlqm9nmr
 ```
-- Install from PyPI
-```
-   pip3 install mlqm9nmr
-```
 
 # Step 2: Load or generate training set descriptors
 
