@@ -1,6 +1,6 @@
 # `mlqm9nmr`
 
-`mlqm9nmr` package is a Python-based kernel-ridge-regression (KRR) model for <sup>13</sup>C-NMR chemical shift predictio trained on the `QM9NMR` dataset. 
+`mlqm9nmr` package is a Python-based kernel-ridge-regression (KRR) model trained on the `QM9NMR` dataset for <sup>13</sup>C-NMR chemical shift predictions of organic molecules. 
 
 # Step 1: Install `mlqm9nmr` 
 
