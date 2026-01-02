@@ -15,13 +15,13 @@ def calc_nmr(xyz_file,descriptor,di_path):
     if descriptor == 'acm_rbf_4':      sig = 3097.5820
     if descriptor == 'abob_4':         sig =   65.5336
     if descriptor == 'abob_rbf_4':     sig = 1682.5215
-    if descriptor == 'abob_rbf_4_UFF': sig = 1659.2701
+    if descriptor == 'abob_rbf_4_uff': sig = 1659.2701
 
     if descriptor == 'acm_4':           p05,p25,p50,p75,p95 = 1297.20, 1612.01, 1833.97, 2058.76, 2258.24
     if descriptor == 'abob_4':          p05,p25,p50,p75,p95 =   13.78,   31.68,   45.45,   60.84,   74.84
     if descriptor == 'acm_rbf_4':       p05,p25,p50,p75,p95 = 1010.39, 1683.87, 2334.47, 3039.01, 3566.43
     if descriptor == 'abob_rbf_4':      p05,p25,p50,p75,p95 =  493.72,  851.42, 1166.87, 1528.98, 1784.97
-    if descriptor == 'abob_rbf_4_UFF':  p05,p25,p50,p75,p95 =  449.06,  839.59, 1149.97, 1507.73, 1811.21
+    if descriptor == 'abob_rbf_4_uff':  p05,p25,p50,p75,p95 =  449.06,  839.59, 1149.97, 1507.73, 1811.21
 
     if di_path == 'bz2': di = get_training_descriptors(descriptor)
     else: di = np.loadtxt(di_path)
@@ -38,7 +38,7 @@ def calc_nmr(xyz_file,descriptor,di_path):
     if descriptor == 'acm_rbf_4':      dq = acm_rbf(4,6,zs,rs)
     if descriptor == 'abob_4':         dq = abob(4,6,zs,rs)
     if descriptor == 'abob_rbf_4':     dq = abob_rbf(4,6,zs,rs)
-    if descriptor == 'abob_rbf_4_UFF': dq = abob_rbf(4,6,zs,rs)
+    if descriptor == 'abob_rbf_4_uff': dq = abob_rbf(4,6,zs,rs)
 
     cs = [] # chemical shifts
 
