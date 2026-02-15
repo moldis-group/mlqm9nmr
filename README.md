@@ -108,9 +108,9 @@ Then go to Step 3.
 
 # References
 - **This work presenting ML models trained on QM9NMR with new descriptors**    
-  [*Enhancing NMR Shielding Predictions of Atoms-in-Molecules Machine Learning Models with Neighborhood-Informed Representations*](https://arxiv.org/html/2510.05623v1)
+  [*Enhancing NMR Shielding Predictions of Atoms-in-Molecules Machine Learning Models with Neighborhood-Informed Representations*](https://doi.org/10.1063/5.0306349)
 <br>Surajit Das, Raghunathan Ramakrishnan
-<br> J. Chem. Phys. (2026) preprint, [https://arxiv.org/html/2510.05623v1](https://arxiv.org/html/2510.05623v1).  
+<br> J. Chem. Phys. 164 (2026) 044106.  
 
 - **QM9NMR dataset**     
   [*Revving up 13C NMR shielding predictions across chemical space: benchmarks for atoms-in-molecules kernel machine learning with new data for 134 kilo molecules*](https://doi.org/10.1088/2632-2153/abe347)
